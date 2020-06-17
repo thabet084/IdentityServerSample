@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AuthProject.Data.Models;
 using AuthProject.Data.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthProject.API.Controllers
@@ -20,6 +21,7 @@ namespace AuthProject.API.Controllers
         }
 
         [HttpPost("{conferenceId}/{name}")]
+        [Authorize(Policy = "PostAttendee")]
         public IActionResult Post(int conferenceId, string name)
         {
             var attendee = repo.Add(

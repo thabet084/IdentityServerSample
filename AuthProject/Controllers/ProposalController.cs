@@ -13,9 +13,12 @@ namespace AuthProject.Web.Controllers
     {
         private readonly IAttendeApiService _api;
 
-        public ProposalController(IAttendeApiService api)
+        public IAuthorizationService _authorizationService { get; }
+
+        public ProposalController(IAttendeApiService api,IAuthorizationService authorizationService)
         {
             _api = api;
+            _authorizationService = authorizationService;
         }
 
         public async Task<IActionResult> Index(int conferenceId)
@@ -49,5 +52,29 @@ namespace AuthProject.Web.Controllers
             var proposal = await _api.ApproveProposal(proposalId);
             return RedirectToAction("Index", new { conferenceId = proposal.ConferenceId });
         }
+        [Authorize(Policy = "IsSpeaker")]
+        public async Task<IActionResult> EditProposal(int proposalId)
+        {
+            var proposal = await _api.GetProposal(proposalId);
+
+            var result = await _authorizationService.AuthorizeAsync(User, proposal, "CanEditProposal");
+            if (result.Succeeded)
+                return View(proposal);
+            else
+                return RedirectToAction("AccessDenied", "Account");
+        }
+
+        [Authorize(Policy = "IsSpeaker")]
+        [HttpPost]
+        public async Task<IActionResult> EditProposal(ProposalModel proposal)
+        {
+            if (ModelState.IsValid)
+                await _api.EditProposal(proposal);
+            return RedirectToAction("Index", new
+            {
+                conferenceId = proposal.ConferenceId
+            });
+        }
+
     }
 }

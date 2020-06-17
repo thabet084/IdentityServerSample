@@ -47,9 +47,19 @@ namespace AuthProject.Services
             await client.PostAsJsonAsync("/Proposal/Add/", model);
         }
 
+        public async Task EditProposal(ProposalModel model)
+        {
+            await client.PostAsJsonAsync("/Proposal/Edit/", model);
+        }
+
         public async Task<ProposalModel> ApproveProposal(int proposalId)
         {
             var response = await client.GetAsync($"/Proposal/Approve/{proposalId}");
+            return await response.ReadContentAs<ProposalModel>();
+        }
+        public async Task<ProposalModel> GetProposal(int proposalId)
+        {
+            var response = await client.GetAsync($"/Proposal/Get/{proposalId}");
             return await response.ReadContentAs<ProposalModel>();
         }
     }

@@ -106,9 +106,12 @@ namespace AuthProject
                 options.AddPolicy("IsSpeaker", policy => policy.RequireRole("Speaker"));
                 options.AddPolicy("CanAddConference", policy => policy.RequireClaim("Permission", "AddConference"));
                 options.AddPolicy("YearsOfExperience", policy => policy.AddRequirements(new YearsOfExperienceRequirement(30)));
+                options.AddPolicy("CanEditProposal", policy => policy.AddRequirements(new ProposalRequirement()));
+
             });
 
             services.AddSingleton<IAuthorizationHandler, YearsOfExperienceAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, ProposalApprovedAuthorizationHandler>();
 
             services.AddRazorPages();
         }

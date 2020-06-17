@@ -37,5 +37,17 @@ namespace AuthProject.API.Controllers
         {
             return await repo.Approve(proposalId);
         }
+
+        [HttpPost("Edit")]
+        public async Task<int> Edit([FromBody]ProposalModel model)
+        {
+            return await  repo.Edit(model);
+        }
+
+        [HttpGet("Get/{proposalId}")]
+        public async Task<ProposalModel> Get(int proposalId)
+        {
+            return await repo.Get(proposalId);
+        }
     }
 }

@@ -59,6 +59,9 @@ namespace AuthProject.API
             services.AddScoped<IProposalRepository, ProposalRepository>();
             services.AddScoped<IAttendeeRepository, AttendeeRepository>();
 
+            services.AddAuthorization(o => o.AddPolicy("PostAttendee",
+                p => p.RequireClaim("scope", "AuthProject_API_PostAttendee")));
+
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {

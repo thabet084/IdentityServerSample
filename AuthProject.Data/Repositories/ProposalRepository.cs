@@ -31,11 +31,27 @@ namespace AuthProject.Data.Repositories
             return dbContext.SaveChangesAsync();
         }
 
+        public async Task<int> Edit(ProposalModel model)
+        {
+            var proposal = await dbContext.Proposals.FirstAsync(p => p.Id == model.Id);
+            proposal.Speaker = model.Speaker;
+            proposal.Title = model.Title;
+            dbContext.Proposals.Update(proposal);
+            return await dbContext.SaveChangesAsync();
+        }
+
         public async Task<ProposalModel> Approve(int proposalId)
         {
             var proposal = await dbContext.Proposals.FirstAsync(p => p.Id == proposalId);
             proposal.Approved = true;
             await dbContext.SaveChangesAsync();
+            return proposal.ToModel();
+        }
+
+        public async Task<ProposalModel> Get(int proposalId)
+        {
+            var proposal = await dbContext.Proposals.FirstAsync(p => p.Id == proposalId);
+          
             return proposal.ToModel();
         }
     }
