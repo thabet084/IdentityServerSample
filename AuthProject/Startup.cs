@@ -63,6 +63,7 @@ namespace AuthProject
 
                     options.Scope.Add("AuthProject");
                     options.Scope.Add("AuthProject_API");
+                    //options.Scope.Add("offline_access");// to provide refresh tokens 
 
                     options.SaveTokens = true;// used for API
 

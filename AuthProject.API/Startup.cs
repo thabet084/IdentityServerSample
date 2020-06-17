@@ -34,11 +34,21 @@ namespace AuthProject.API
             services.AddControllers(o=>o.Filters.Add(new AuthorizeFilter()));
             //services.AddControllers();
 
+            services.AddDistributedMemoryCache();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+                //.AddJwtBearer(options =>
+                //{
+                //    options.Authority = "https://localhost:44319/";
+                //    options.Audience = "AuthProject_API";
+                //});
+                //use the followng as JWT not support reference token
+                .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = "https://localhost:44319/";
-                    options.Audience = "AuthProject_API";
+                    options.ApiName = "AuthProject_API";
+                    options.ApiSecret = "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0";
+                    options.EnableCaching = true;
                 });
 
             services.AddDbContext<AuthPortalContext>(options =>

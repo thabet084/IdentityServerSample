@@ -46,7 +46,12 @@ namespace AuthProject.IdentityProvider
                   Configuration.GetSection("IdentityServer:ApiResources"))
               .AddInMemoryClients(
                   Configuration.GetSection("IdentityServer:Clients"))
-              .AddDeveloperSigningCredential()// this used to encrypt tokens
+
+              // this used to encrypt tokens
+              //responsible for generating tempkey.rsa file that contain private&public keys
+              .AddDeveloperSigningCredential()//used only for develpmnent
+              //.AddSigningCredential()//used for prodcutions as it not expose private keys
+
               .AddAspNetIdentity<ApplicationUser>(); //integrating with identity framework
 
         }

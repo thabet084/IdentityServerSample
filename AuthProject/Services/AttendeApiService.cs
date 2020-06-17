@@ -1,4 +1,6 @@
-﻿using AuthProject.Models;
+﻿
+using AuthProject.Data.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +34,23 @@ namespace AuthProject.Services
         public async Task AddConference(ConferenceModel model)
         {
             await client.PostAsJsonAsync("/Conference", model);
+        }
+
+        public async Task<IEnumerable<ProposalModel>> GetAllProposalsForConference(int conferenceId)
+        {
+            var response = await client.GetAsync($"/Proposal/GetAll/{conferenceId}");
+            return await response.ReadContentAs<List<ProposalModel>>();
+        }
+
+        public async Task AddProposal(ProposalModel model)
+        {
+            await client.PostAsJsonAsync("/Proposal/Add/", model);
+        }
+
+        public async Task<ProposalModel> ApproveProposal(int proposalId)
+        {
+            var response = await client.GetAsync($"/Proposal/Approve/{proposalId}");
+            return await response.ReadContentAs<ProposalModel>();
         }
     }
 }

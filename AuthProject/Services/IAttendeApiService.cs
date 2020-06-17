@@ -1,4 +1,5 @@
-﻿using AuthProject.Models;
+﻿using AuthProject.Data.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,12 @@ namespace AuthProject.Services
 {
     public interface IAttendeApiService
     {
+
         Task<AttendeeModel> AddAttendee(AttendeeModel attendee);
-        Task<IEnumerable<ConferenceModel>> GetAllConferences();
         Task AddConference(ConferenceModel model);
+        Task AddProposal(ProposalModel model);
+        Task<ProposalModel> ApproveProposal(int proposalId);
+        Task<IEnumerable<ConferenceModel>> GetAllConferences();
+        Task<IEnumerable<ProposalModel>> GetAllProposalsForConference(int conferenceId);
     }
 }
