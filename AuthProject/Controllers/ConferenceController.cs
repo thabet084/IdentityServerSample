@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AuthProject.Data.Models;
 
 using AuthProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthProject.Controllers
@@ -24,6 +25,7 @@ namespace AuthProject.Controllers
             return View(await _api.GetAllConferences());
         }
 
+        [Authorize(Policy ="CanAddConference")]
         public IActionResult Add()
         {
             ViewBag.Title = "Organizer - Add Conference";
@@ -31,6 +33,7 @@ namespace AuthProject.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "CanAddConference")]
         public async Task<IActionResult> Add(ConferenceModel model)
         {
             if (ModelState.IsValid)

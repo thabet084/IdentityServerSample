@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Authentication;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 using AuthProject.Services;
+using Microsoft.AspNetCore.Authorization;
+using AuthProject.Web.Authorization;
 
 namespace AuthProject
 {
@@ -82,6 +84,9 @@ namespace AuthProject
                     //PKCE solve issue of Code Substitution Attack
                     //PKCE is an extension to the Authorization Code flow to prevent certain attacks and to be able to securely perform the OAuth exchange from public clients.
                     options.UsePkce = true;
+
+
+                    options.TokenValidationParameters.RoleClaimType = "Role";
                 });
             
             services.AddHttpContextAccessor();
@@ -95,6 +100,15 @@ namespace AuthProject
                         new AuthenticationHeaderValue("bearer", accessToken);
                    client.BaseAddress = new Uri("https://localhost:44316/");
                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsSpeaker", policy => policy.RequireRole("Speaker"));
+                options.AddPolicy("CanAddConference", policy => policy.RequireClaim("Permission", "AddConference"));
+                options.AddPolicy("YearsOfExperience", policy => policy.AddRequirements(new YearsOfExperienceRequirement(30)));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, YearsOfExperienceAuthorizationHandler>();
 
             services.AddRazorPages();
         }

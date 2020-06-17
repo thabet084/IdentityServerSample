@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AuthProject.Data.Models;
 using AuthProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthProject.Web.Controllers
@@ -25,6 +26,8 @@ namespace AuthProject.Web.Controllers
             return View(await _api.GetAllProposalsForConference(conferenceId));
         }
 
+        [Authorize(Policy = "IsSpeaker")]
+        [Authorize(Policy = "YearsOfExperience")]
         public IActionResult AddProposal(int conferenceId)
         {
             ViewBag.Title = "Speaker - Add Proposal";
@@ -32,6 +35,8 @@ namespace AuthProject.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "IsSpeaker")]
+        [Authorize(Policy ="YearsOfExperience")]
         public async Task<IActionResult> AddProposal(ProposalModel proposal)
         {
             if (ModelState.IsValid)
